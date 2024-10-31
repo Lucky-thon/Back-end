@@ -6,6 +6,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import MissionSuccessPost
 from .serializers import MissionSuccessPostSerializer
+import logging
 
 def mission_success_list(request):
     posts = MissionSuccessPost.objects.all()
