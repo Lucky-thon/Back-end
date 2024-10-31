@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'rest_framework.authtoken',  # Token 인증을 사용하는 경우 추가
-    'board'
+    'board',
+    'notification.apps.NotificationsConfig',
+    'comments',
 ]
 
 MIDDLEWARE = [
