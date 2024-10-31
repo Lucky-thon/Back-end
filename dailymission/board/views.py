@@ -32,3 +32,8 @@ class MissionSuccessPostCreateAPI(generics.CreateAPIView):
     queryset = MissionSuccessPost.objects.all()
     serializer_class = MissionSuccessPostSerializer
     permission_classes = [IsAuthenticated]  # 인증된 사용자만 게시글 작성 가능
+
+    def post(self, request, *args, **kwargs):
+        logging.info(f"Request data: {request.data}")
+        logging.info(f"User: {request.user}")  # 사용자가 인증되었는지 확인
+        return super().post(request, *args, **kwargs)
