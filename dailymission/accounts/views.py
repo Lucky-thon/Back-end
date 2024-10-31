@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate
-from rest_framework import status
-from rest_framework.authtoken.models import Token
-from rest_framework.permissions import AllowAny
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.authtoken.models import Token
 
 
 def account_home(request):
@@ -62,13 +62,47 @@ class LoginAPIView(APIView):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
+            # 사용자 로그인
             login(request, user)
-            return Response({"message": "로그인 성공!"}, status=status.HTTP_200_OK)
+
+            # 사용자의 토큰 조회
+            token, created = Token.objects.get_or_create(user=user)
+
+            # 토큰과 함께 응답
+            return Response({
+                "message": "로그인 성공!",
+                "token": token.key  # 토큰 키 반환
+            }, status=status.HTTP_200_OK)
+
         else:
             return Response({"error": "잘못된 사용자 이름 또는 비밀번호입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProtectedView(APIView):
+# 회원가입 api
+class RegisterAPIView(APIView):
+    permission_classes = [AllowAny]  # 누구나 접근 가능
+
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        # 사용자 생성
+        if User.objects.filter(username=username).exists():
+            return Response({"error": "이미 존재하는 사용자입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create_user(username=username, password=password)
+        user.save()
+
+        # 자동 로그인 및 토큰 생성
+        token, created = Token.objects.get_or_create(user=user)
+
+        return Response({
+            "message": "회원가입 성공!",
+            "token": token.key  # 생성된 토큰 반환
+        }, status=status.HTTP_201_CREATED)
+
+# 보안 api
+class ProtectedAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
