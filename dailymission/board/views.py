@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import MissionSuccessPostForm
 from django.contrib.auth.decorators import login_required
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .models import MissionSuccessPost
 from .serializers import MissionSuccessPostSerializer
 
@@ -26,3 +27,8 @@ def mission_success_create(request):
 class MissionSuccessPostListAPI(generics.ListAPIView):
     queryset = MissionSuccessPost.objects.all()
     serializer_class = MissionSuccessPostSerializer
+
+class MissionSuccessPostCreateAPI(generics.CreateAPIView):
+    queryset = MissionSuccessPost.objects.all()
+    serializer_class = MissionSuccessPostSerializer
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 게시글 작성 가능
