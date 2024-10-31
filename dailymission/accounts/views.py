@@ -71,7 +71,6 @@ class LoginAPIView(APIView):
             # 토큰과 함께 응답
             return Response({
                 "message": "로그인 성공!",
-                "username": user.username,  # 사용자 이름 반환
                 "token": token.key  # 토큰 키 반환
             }, status=status.HTTP_200_OK)
 

@@ -58,6 +58,10 @@ class RecruitmentPostCreateAPI(generics.CreateAPIView):
     serializer_class = RecruitmentPostSerializer
     permission_classes = [IsAuthenticated]  # 인증된 사용자만 게시글 작성 가능
 
+    def perform_create(self, serializer):
+        # 요청의 사용자(request.user)를 작성자로 설정
+        serializer.save(author=self.request.user)
+
     def post(self, request, *args, **kwargs):
         logger.info(f"Request data: {request.data}")
         logger.info(f"User: {request.user}")  # 사용자가 인증되었는지 확인
