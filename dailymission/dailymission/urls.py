@@ -22,6 +22,8 @@ from django.contrib import admin
 from django.urls import path, include  # include 추가
 from time_missions.views import home  # home 뷰 가져오기
 from time_missions.views import ProductListAPI
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', home, name='home'),  # 홈 페이지 URL 설정
@@ -29,5 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # admin 페이지 URL 설정
     path('api/mission/', ProductListAPI.as_view(), name='ProductListAPI'),  # as_view() 추가
     path('accounts/', include('accounts.urls')),  # accounts 앱의 URL 포함
+    path('board/', include('board.urls')), # board 앱의 URL 포함
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
