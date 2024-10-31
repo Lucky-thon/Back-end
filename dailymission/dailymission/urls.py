@@ -28,5 +28,6 @@ urlpatterns = [
     path('time_missions/', include('time_missions.urls')),  # time_missions 앱의 URL 포함
     path('admin/', admin.site.urls),  # admin 페이지 URL 설정
     path('api/mission/', ProductListAPI.as_view(), name='ProductListAPI'),  # as_view() 추가
+    path('accounts/', include('accounts.urls')),  # accounts 앱의 URL 포함
 ]
 
