@@ -18,3 +18,11 @@ class NotificationListAPI(APIView):
         notifications = request.user.notifications.filter(is_read=False)
         notifications.update(is_read=True)
         return Response({"message": "All notifications marked as read"}, status=status.HTTP_200_OK)
+
+class UnreadNotificationCheckAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # 읽지 않은 알림이 있는지 여부를 확인
+        has_unread_notifications = Notification.objects.filter(user=request.user, is_read=False).exists()
+        return Response({"has_unread_notifications": has_unread_notifications})
