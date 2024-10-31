@@ -75,5 +75,10 @@ class RecruitmentCommentCreateAPI(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]  # 인증된 사용자만 댓글 작성 가능
 
     def perform_create(self, serializer):
-        # 댓글 작성자 설정
-        serializer.save(author=self.request.user)  # 현재 사용자로 작성자 설정
+        logger.info(f"Author before save: {self.request.user}")  # 현재 사용자 로그
+        serializer.save(author=self.request.user)  # 작성자로 현재 사용자 설정
+
+    def post(self, request, *args, **kwargs):
+        logger.info(f"Request data: {request.data}")
+        logger.info(f"User: {request.user}")  # 사용자가 인증되었는지 확인
+        return super().post(request, *args, **kwargs)
