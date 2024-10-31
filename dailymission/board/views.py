@@ -1,8 +1,10 @@
 # board/views.py
 from django.shortcuts import render, redirect
-from .models import MissionSuccessPost
 from .forms import MissionSuccessPostForm
 from django.contrib.auth.decorators import login_required
+from rest_framework import generics
+from .models import MissionSuccessPost
+from .serializers import MissionSuccessPostSerializer
 
 def mission_success_list(request):
     posts = MissionSuccessPost.objects.all()
@@ -20,3 +22,7 @@ def mission_success_create(request):
     else:
         form = MissionSuccessPostForm()
     return render(request, 'board/mission_success_create.html', {'form': form})
+
+class MissionSuccessPostListAPI(generics.ListAPIView):
+    queryset = MissionSuccessPost.objects.all()
+    serializer_class = MissionSuccessPostSerializer

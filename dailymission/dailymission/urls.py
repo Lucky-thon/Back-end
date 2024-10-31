@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),  # admin 페이지 URL 설정
     path('api/mission/', ProductListAPI.as_view(), name='ProductListAPI'),  # as_view() 추가
     path('accounts/', include('accounts.urls')),  # accounts 앱의 URL 포함
-    path('board/', include('board.urls')), # board 앱의 URL 포함
+    path('board/', include('board.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
