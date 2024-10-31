@@ -4,12 +4,13 @@ from .forms import MissionSuccessPostForm
 from django.contrib.auth.decorators import login_required
 from .models import MissionSuccessPost
 from .serializers import MissionSuccessPostSerializer
-from rest_framework import generics
-from .models import RecruitmentPost
 from .serializers import RecruitmentPostSerializer
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 import logging
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .models import RecruitmentComment, RecruitmentPost
+from .serializers import RecruitmentCommentSerializer
 
 def mission_success_list(request):
     posts = MissionSuccessPost.objects.all()
@@ -66,3 +67,13 @@ class RecruitmentPostCreateAPI(generics.CreateAPIView):
         logger.info(f"Request data: {request.data}")
         logger.info(f"User: {request.user}")  # 사용자가 인증되었는지 확인
         return super().post(request, *args, **kwargs)
+
+# 인원 모집 게시판 댓글 생성 api
+class RecruitmentCommentCreateAPI(generics.CreateAPIView):
+    queryset = RecruitmentComment.objects.all()
+    serializer_class = RecruitmentCommentSerializer
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 댓글 작성 가능
+
+    def perform_create(self, serializer):
+        # 댓글 작성자 설정
+        serializer.save(author=self.request.user)  # 현재 사용자로 작성자 설정

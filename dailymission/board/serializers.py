@@ -1,5 +1,5 @@
 # board/serializers.py
-from .models import RecruitmentPost
+from .models import RecruitmentPost, RecruitmentComment
 from .models import MissionSuccessPost
 from rest_framework import serializers
 
@@ -18,3 +18,13 @@ class RecruitmentPostSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['author'] = instance.author.username  # 작성자의 username만 포함
         return representation
+
+class RecruitmentCommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecruitmentComment
+        fields = ['id', 'post', 'author', 'content', 'created_at']
+
+    def create(self, validated_data):
+        # 현재 사용자 설정
+        validated_data['author'] = self.context['request'].user
+        return super().create(validated_data)
