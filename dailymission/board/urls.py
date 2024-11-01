@@ -16,5 +16,5 @@ urlpatterns = [
     path('api/recruitment/', RecruitmentPostListAPI.as_view(), name='recruitment_post_list'),  # 인원 모집 게시판
     path('api/recruitment/create/', RecruitmentPostCreateAPI.as_view(), name='recruitment_post_create'),  # 인원 모집 게시글 작성
     path('api/recruitment/comments/create/<int:bid>', RecruitmentCommentCreateAPI.as_view(), name='Recruitment-comment-create'),
-    path('recruitment/comments/<int:post_id>/', RecruitmentCommentListAPI.as_view(), name='recruitment_comment_list'),
+    path('api/recruitment/comments/<int:post_id>/', RecruitmentCommentListAPI.as_view(), name='recruitment_comment_list'),
 ]
