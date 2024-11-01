@@ -20,13 +20,12 @@ class RecruitmentPostSerializer(serializers.ModelSerializer):
         return representation
 
 class RecruitmentCommentSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='writer.username')  # 작성자 username 포함
+
     class Meta:
         model = RecruitmentComment
         fields = '__all__'
 
-    def create(self, validated_data):
-        # 현재 사용자를 작성자로 설정
-        validated_data['author'] = self.context['request'].user
-        # 부모 클래스의 create 메서드 호출
-        return super().create(validated_data)  # super()를 사용하여 부모 메서드 호출
+
+
 

@@ -23,7 +23,10 @@ class RecruitmentPost(models.Model):
         return self.title
 
 class RecruitmentComment(models.Model):
-    post = models.ForeignKey(RecruitmentPost, related_name='comments', on_delete=models.CASCADE)  # 댓글이 속한 게시글
-    author = models.ForeignKey(User, on_delete=models.CASCADE)  # 댓글 작성자
-    content = models.TextField()  # 댓글 내용
-    created_at = models.DateTimeField(auto_now_add=True)  # 댓글 작성일자
+    comment = models.TextField() # 댓글 내용
+    create_at = models.DateTimeField(auto_now_add=True) # 댓글 생성일
+    post = models.ForeignKey(RecruitmentPost, on_delete=models.CASCADE)  # 어떤 게시물에 달린 댓글인지 알 수 있는 게시글
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)  # 댓글 작성자
+
+    def __str__(self):
+        return self.comment
