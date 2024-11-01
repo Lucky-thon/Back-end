@@ -12,6 +12,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .models import MissionSuccessPost
 from .serializers import MissionSuccessPostSerializer
+from rest_framework.exceptions import PermissionDenied
 
 def mission_success_list(request):
     posts = MissionSuccessPost.objects.all()
@@ -30,12 +31,16 @@ def mission_success_create(request):
         form = MissionSuccessPostForm()
     return render(request, 'board/mission_success_create.html', {'form': form})
 
-# 미션 성공 게시판 api
+# 미션 성공 게시판 API
 class MissionSuccessPostListAPI(generics.ListAPIView):
     queryset = MissionSuccessPost.objects.all()
     serializer_class = MissionSuccessPostSerializer
 
     def get_queryset(self):
+        # 인증되지 않은 사용자는 접근을 허용하지 않음
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied("로그인 후에 접근 가능합니다.")
+
         # 사용자 프로필을 조회하여 has_posted_in_mission_success 필드 확인
         profile = self.request.user.userprofile
         if profile.has_posted_in_mission_success:
