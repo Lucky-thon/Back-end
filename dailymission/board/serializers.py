@@ -8,6 +8,11 @@ class MissionSuccessPostSerializer(serializers.ModelSerializer):
         model = MissionSuccessPost
         fields = '__all__'  # 필요한 필드만 선택할 수 있습니다.
 
+        def to_representation(self, instance):
+            representation = super().to_representation(instance)
+            representation['author'] = instance.author.username  # 작성자의 username만 포함
+            return representation
+
 
 class RecruitmentPostSerializer(serializers.ModelSerializer):
     class Meta:
