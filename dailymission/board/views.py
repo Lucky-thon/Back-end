@@ -35,18 +35,15 @@ def mission_success_create(request):
 class MissionSuccessPostListAPI(generics.ListAPIView):
     queryset = MissionSuccessPost.objects.all()
     serializer_class = MissionSuccessPostSerializer
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 접근 가능
 
     def get_queryset(self):
-        # 인증되지 않은 사용자는 접근을 허용하지 않음
-        if not self.request.user.is_authenticated:
-            raise PermissionDenied("로그인 후에 접근 가능합니다.")
-
-        # 사용자 프로필을 조회하여 has_posted_in_mission_success 필드 확인
+        # 로그인한 사용자의 프로필을 조회하여 has_posted_in_mission_success 확인
         profile = self.request.user.userprofile
         if profile.has_posted_in_mission_success:
-            return super().get_queryset()  # 접근 허용 시 전체 게시글 반환
+            return super().get_queryset()  # 게시글 열람 가능 시 전체 게시글 반환
         else:
-            # 접근을 차단하기 위해 빈 queryset 반환
+            # 작성만 가능하게 하고, 게시글은 보이지 않도록 빈 queryset 반환
             return MissionSuccessPost.objects.none()
 
     def get_serializer_context(self):
@@ -54,6 +51,7 @@ class MissionSuccessPostListAPI(generics.ListAPIView):
         context = super().get_serializer_context()
         context['request'] = self.request
         return context
+
 
 # 미션 성공 게시판 작성 api
 class MissionSuccessPostCreateAPI(generics.CreateAPIView):
