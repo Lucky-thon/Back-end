@@ -181,6 +181,7 @@ CELERY_BEAT_SCHEDULE = {
 # 이 설정이 있어야 LoginAPIView에서 생성된 토큰이 인증에 사용될 수 있습니다.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
