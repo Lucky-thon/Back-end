@@ -35,6 +35,21 @@ class MissionSuccessPostListAPI(generics.ListAPIView):
     queryset = MissionSuccessPost.objects.all()
     serializer_class = MissionSuccessPostSerializer
 
+    def get_queryset(self):
+        # 사용자 프로필을 조회하여 has_posted_in_mission_success 필드 확인
+        profile = self.request.user.userprofile
+        if profile.has_posted_in_mission_success:
+            return super().get_queryset()  # 접근 허용 시 전체 게시글 반환
+        else:
+            # 접근을 차단하기 위해 빈 queryset 반환
+            return MissionSuccessPost.objects.none()
+
+    def get_serializer_context(self):
+        # serializer에 request 객체를 context로 전달하여 사용자 정보 접근 가능하게 설정
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
 # 미션 성공 게시판 작성 api
 class MissionSuccessPostCreateAPI(generics.CreateAPIView):
     queryset = MissionSuccessPost.objects.all()
