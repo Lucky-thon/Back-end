@@ -2,7 +2,8 @@
 from django.urls import path
 from . import views
 from rest_framework.routers import DefaultRouter
-from .views import MissionSuccessPostListAPI, MissionSuccessPostCreateAPI, RecruitmentPostListAPI, RecruitmentPostCreateAPI, RecruitmentCommentCreateAPI
+from .views import (MissionSuccessPostListAPI, MissionSuccessPostCreateAPI, RecruitmentPostListAPI,
+                    RecruitmentPostCreateAPI, RecruitmentCommentCreateAPI, RecruitmentCommentListAPI)
 
 router = DefaultRouter()
 router.register(r'mission_success_posts', MissionSuccessPostListAPI, basename='mission-success-posts')
@@ -15,4 +16,5 @@ urlpatterns = [
     path('api/recruitment/', RecruitmentPostListAPI.as_view(), name='recruitment_post_list'),  # 인원 모집 게시판
     path('api/recruitment/create/', RecruitmentPostCreateAPI.as_view(), name='recruitment_post_create'),  # 인원 모집 게시글 작성
     path('api/recruitment/comments/create/<int:bid>', RecruitmentCommentCreateAPI.as_view(), name='Recruitment-comment-create'),
+    path('recruitment/comments/<int:post_id>/', RecruitmentCommentListAPI.as_view(), name='recruitment_comment_list'),
 ]

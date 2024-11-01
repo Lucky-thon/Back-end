@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 myenv/
 venv/
+*.pyc
 
 # Django
 *.sqlite3
@@ -10,3 +11,5 @@ venv/
 .env
 
 .idea/
+
+.gitignore

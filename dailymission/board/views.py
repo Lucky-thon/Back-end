@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import MissionSuccessPost
 from .serializers import MissionSuccessPostSerializer
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 def mission_success_list(request):
     posts = MissionSuccessPost.objects.all()
@@ -101,3 +102,17 @@ class RecruitmentCommentCreateAPI(generics.CreateAPIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RecruitmentCommentListAPI(generics.ListAPIView):
+    serializer_class = RecruitmentCommentSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        post_id = self.kwargs.get('post_id')  # URL에서 post_id를 가져옴
+        return RecruitmentComment.objects.filter(post_id=post_id)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
+            return Response({"error": "댓글이 존재하지 않습니다."}, status=status.HTTP_404_NOT_FOUND)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
