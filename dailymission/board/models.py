@@ -30,3 +30,11 @@ class RecruitmentComment(models.Model):
 
     def __str__(self):
         return self.comment
+
+# 사용자 프로필 모델
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    has_posted_in_mission_success = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username

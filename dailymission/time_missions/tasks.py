@@ -50,3 +50,5 @@ def change_mission():
             logger.info("No mission found to update.")
     except Exception as e:
         logger.error(f"An error occurred: {e}")
+
+

@@ -171,7 +171,12 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'time_missions.tasks.change_mission',
         'schedule': crontab(minute='*/1'),   # 1분마다 실행
     },
+    'reset-post-status-every-day': {
+        'task': 'board.tasks.reset_has_posted_status',
+        'schedule': crontab(minute='*/1'),  # 1분마다 실행
+    },
 }
+
 
 # 이 설정이 있어야 LoginAPIView에서 생성된 토큰이 인증에 사용될 수 있습니다.
 REST_FRAMEWORK = {
